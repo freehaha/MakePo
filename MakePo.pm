@@ -101,6 +101,7 @@ sub parse {
 	);
 
 	my $rule = File::Find::Rule->file->name("*.pm", "*.pl", "*.js")->start(@paths);
+	make_path('po');
 	while(defined (my $path = $rule->match)) {
 		$ext->extract_file($path);
 		print "Parsing $path\n";
@@ -109,7 +110,6 @@ sub parse {
 	print "Update po/app.po\n";
 	$ext->write_po('po/app.po');
 
-	make_path('po');
 	#update the .pos
 	my @pofiles = File::Find::Rule->file->name("*.po")->not_name("app.po")->in('po');
 	my $ents = $ext->compiled_entries;
