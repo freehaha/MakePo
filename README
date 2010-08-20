@@ -1,9 +1,9 @@
 usage:
-	bin/po parse test.pl [--js]
-	bin/po lang zh_tw zh_cn en
+	bin/po lang zh_tw en
+	bin/po parse examples [--js]
 
 	edit po/*.po
-	./test.pl
+	run examples/test.pl or open examples/tests.html
 
 updating: 
 	bin/po parse lib
