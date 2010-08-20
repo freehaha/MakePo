@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-package UU;
+package MakePo;
 use File::Copy;
 use File::Find::Rule;
 use File::Path qw/make_path/;

@@ -1,9 +1,9 @@
 #!/usr/bin/perl
-use UU;
+use MakePo;
 use strict;
 use warnings;
 my %dp_table = (
-	parse => \&UU::parse,
+	parse => \&MakePo::parse,
 	lang => \&lang,
 );
 
@@ -27,7 +27,7 @@ if(exists $dp_table{$cmd}) {
 sub lang {
 	while(my $lg = shift) {
 		eval {
-			UU::lang($lg);
+			MakePo::lang($lg);
 			print "new po: po/$lg.po\n";
 		};
 		if($@) {
