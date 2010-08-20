@@ -1,5 +1,5 @@
 usage:
-	bin/po parse lib
+	bin/po parse test.pl [--js]
 	bin/po lang zh_tw zh_cn en
 
 	edit po/*.po
