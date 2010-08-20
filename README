@@ -1,0 +1,10 @@
+usage:
+	bin/po parse lib
+	bin/po lang zh_tw zh_cn en
+
+	edit po/*.po
+	./test.pl
+
+updating: 
+	bin/po parse lib
+

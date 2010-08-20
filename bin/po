@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+use Locale::Maketext::Extract;
+use UU;
+use strict;
+use warnings;
+my %dp_table = (
+	parse => \&UU::parse,
+	lang => \&lang,
+);
+
+if($#ARGV < 1) {
+	print "usage: ./po parse <file list>\n";
+	exit;
+}
+my $cmd = shift @ARGV;
+
+if(exists $dp_table{$cmd}) {
+	eval {
+		$dp_table{$cmd}(@ARGV)
+	};
+	if($@) {
+		print $@;
+	}
+} else {
+	print "unknown command $cmd\n";
+}
+
+sub lang {
+	while(my $lg = shift) {
+		eval {
+			UU::lang($lg);
+			print "new po: po/$lg.po\n";
+		};
+		if($@) {
+			print $@;
+		}
+	}
+}
