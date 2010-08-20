@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-use Locale::Maketext::Extract;
 use UU;
 use strict;
 use warnings;

@@ -4,7 +4,9 @@ use File::Copy;
 use File::Find::Rule;
 use File::Path qw/make_path/;
 use Locale::Maketext::Extract;
+use Getopt::Long;
 use Exporter 'import';
+use JSON::XS;
 my @EXPORT = qw(_);
 use Carp;
 use strict;
@@ -86,6 +88,9 @@ sub lang {
 }
 
 sub parse {
+	@ARGV = @_;
+	my $js;
+	GetOptions('js' => \$js);
 	my @paths = @ARGV;
 	my $ext = Locale::Maketext::Extract->new(
 		plugins => {
@@ -95,7 +100,7 @@ sub parse {
 		warnings => 1,
 	);
 
-	my $rule = File::Find::Rule->file->name("*.pm", "*.pl")->start(@paths);
+	my $rule = File::Find::Rule->file->name("*.pm", "*.pl", "*.js")->start(@paths);
 	while(defined (my $path = $rule->match)) {
 		$ext->extract_file($path);
 		print "Parsing $path\n";
@@ -114,7 +119,28 @@ sub parse {
 		$ext->set_compiled_entries($ents);
 		$ext->compile(1);
 		$ext->write_po($po);
+		if($js) {
+			my $lg = $po;
+			$lg =~ s#po/(\S+)\.po#$1#;
+			dump_js($lg, $ext);
+		}
 	}
+}
+
+=dump_js
+	generate a js dict containing all entries
+=cut
+sub dump_js {
+	my $lg = shift;
+	my $ext = shift;
+	my $ents = $ext->entries;
+	my %entries = ();
+	foreach my $ent (keys %$ents) {
+		$entries{$ent} = $ext->msgstr($ent);
+	}
+	open F, ">po/$lg.js" or die "failed to open po/$lg.js";
+	print F "var dict = ". encode_json(\%entries);
+	close F;
 }
 
 1;
