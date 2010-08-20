@@ -6,7 +6,7 @@ use File::Path qw/make_path/;
 use Locale::Maketext::Extract;
 use Getopt::Long;
 use Exporter 'import';
-use JSON::XS;
+use JSON;
 my @EXPORT = qw(_);
 use Carp;
 use strict;
@@ -139,7 +139,7 @@ sub dump_js {
 		$entries{$ent} = $ext->msgstr($ent);
 	}
 	open F, ">po/$lg.js" or die "failed to open po/$lg.js";
-	print F "var dict = ". encode_json(\%entries);
+	print F "var dict = ". JSON->new->utf8(0)->encode(\%entries);
 	close F;
 }
 
